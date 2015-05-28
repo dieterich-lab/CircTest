@@ -1,0 +1,113 @@
+install.packages('devtools')
+install.packages('roxygen2')
+library(devtools)
+install_github('devtools','hodley')
+install_github('devtools','hadley')
+load_all()
+load_all()
+load_all()
+load_all()
+help(CircTest::)
+help(CircTest)
+library(CircTest)
+filter0()
+library(LSD)
+help(LSD)
+heatscatter
+heatbarplot
+load_all()
+library(devtools)
+library(roxygen2)
+load_all()
+library(CircTest)
+detach("package:LSD", unload=TRUE)
+CircTest::
+CircTest::Circ.filter
+library(CircTest)
+library(CircTest)
+library(CircTest)
+library(CircTest)
+lm
+group = rep(seq(1,Ntimepoints),each=Nreplicates)
+group = rep(seq(1,3),each=6)
+remove(group)
+rep(seq(1,3),each=6)
+require(aod)
+library(CircTest)
+library(CircTest)
+library(CircTest)
+library(CircTest)
+Circ.test
+library(CircTest)
+library(CircTest)
+Circ.test
+library(CircTest)
+library(CircTest)
+Circ.test
+library(CircTest)
+library(CircTest)
+library(CircTest)
+library(CircTest)
+Circ.test
+sample(100)
+load("~/Documents/Rat_project/AnalysisBackup/Thesis Anlysis Backup/Westholm_Data.RData")
+devtools::use_data(CircRNACount_filtered)
+#devtools::use_data()
+View(CircRNACount_NrIn)
+devtools::use_data(LinearCount_filtered)
+library(CircTest)
+load("~/Documents/Rat_project/CircTest/data/CircRNACount.rda")
+View(CircRNACount_filtered)
+remove(CircRNACount_filtered)
+load("~/Documents/Rat_project/AnalysisBackup/Thesis Anlysis Backup/Westholm_Data.RData")
+CircRNACount=CircRNACount_filtered
+LinearCount=LinearCount_filtered
+rownames(CircRNACount)=c(1:nrow(CircRNACount))
+View(CircRNACount)
+rownames(LinearCount)=c(1:nrow(LinearCount))
+View(LinearCount)
+devtools::use_data(LinearCount)
+devtools::use_data(CircRNACount)
+library(CircTest)
+load("~/Documents/Rat_project/CircTest/data/LinearCount.rda")
+View(LinearCount)
+class(LinearCount)
+load("~/Documents/Rat_project/CircTest/data/CircRNACount.rda")
+CircRNACount=as.matrix(CircRNACount)
+View(CircRNACount)
+LinearCount=as.matrix(LinearCount)
+devtools::use_data(CircRNACount)
+devtools::use_data(LinearCount)
+load("~/Documents/Rat_project/CircTest/data/CircRNACount.rda")
+library(CircTest)
+load("~/Documents/Rat_project/CircTest/data/CircRNACount.rda")
+View(CircRNACount)
+colnames(CircRNACount)
+View(CircRNACount)
+colnames(CircRNACount)[11]
+colnames(CircRNACount)[11] = "Vrg_F_4_2"
+View(CircRNACount)
+load("~/Documents/Rat_project/CircTest/data/LinearCount.rda")
+View(LinearCount)
+colnames(LinearCount)= colnames(LinearCount)
+#colnames(CircRNACount)[11] = "Vrg_F_20_1"
+colnames(CircRNACount)[18]
+colnames(CircRNACount)[16]
+colnames(CircRNACount)[16]
+colnames(CircRNACount)[15]
+colnames(CircRNACount)[17]
+#colnames(CircRNACount)[17] = "Vrg_F_20_1"
+colnames(CircRNACount)[17] = "Vrg_F_20_1"
+View(CircRNACount)
+colnames(CircRNACount)[17] = "Vrg_F_20_2"
+View(CircRNACount)
+colnames(LinearCount)= colnames(LinearCount)
+library(CircTest)
+library(CircTest)
+CircRNACount=as.data.frame(CircRNACount)
+LinearCount=as.data.frame(LinearCount)
+devtools::use_data(CircRNACount)
+devtools::use_data(CircRNACount,overwrite=T)
+devtools::use_data(LinearCount,overwrite=T)
+library(CircTest)
+library(CircTest)

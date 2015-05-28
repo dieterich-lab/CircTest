@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1432841469286.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2A90CF90",
+    "lastKnownWriteTime" : 140561394696192,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "test$sig.dat",
+        "contentUrl" : "content?title=test%24sig.dat&file=c89282269c4046ef9712c0cf98b07bb2.htm",
+        "displayedObservations" : 102,
+        "displayedVariables" : 22,
+        "totalObservations" : 102,
+        "variables" : 21
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -1,0 +1,8 @@
+CircTest="/Users/jcheng/Library/R/3.1/library/CircTest"
+datasets="/Library/Frameworks/R.framework/Versions/3.1/Resources/library/datasets"
+grDevices="/Library/Frameworks/R.framework/Versions/3.1/Resources/library/grDevices"
+graphics="/Library/Frameworks/R.framework/Versions/3.1/Resources/library/graphics"
+methods="/Library/Frameworks/R.framework/Versions/3.1/Resources/library/methods"
+roxygen2="/Users/jcheng/Library/R/3.1/library/roxygen2"
+stats="/Library/Frameworks/R.framework/Versions/3.1/Resources/library/stats"
+utils="/Library/Frameworks/R.framework/Versions/3.1/Resources/library/utils"

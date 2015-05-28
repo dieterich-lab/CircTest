@@ -1,0 +1,16 @@
+{
+    "contents" : "Package: CircTest\nTitle: Test circRNA dependence on host genes\nVersion: 0.1.0\nAuthors@R: person(\"Jun\", \"Cheng\", email = \"s6juncheng@gmail.com\", role = c(\"aut\", \"cre\"))\nDescription: What the package does (one paragraph)\nDepends: R (>= 3.1.0)\nLicense: MIT\nLazyData: true\nSuggests: knitr, rmarkdown\nVignetteBuilder: knitr",
+    "created" : 1432842066352.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2846612111",
+    "id" : "6EB1EF14",
+    "lastKnownWriteTime" : 1432842075,
+    "path" : "~/Documents/Rat_project/CircTest/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "dcf"
+}
