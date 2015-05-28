@@ -30,7 +30,7 @@ Circ.test <- function(Circ=Circ,Linear=Linear,group,alpha=0.05,plotsig=T){
   
   # groups
   if ( length(group) != ncol(Circ)-3 ){
-    stop("ength of 'group' must be equal to the number of samples of 'Circ' and 'Linear'. ")
+    stop("length of 'group' must be equal to the number of samples of 'Circ' and 'Linear'. ")
   }
   group = factor(group)
 
