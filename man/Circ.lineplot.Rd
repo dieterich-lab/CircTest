@@ -36,6 +36,9 @@ Plot circRNA and host gene expression as line plot. Plot per gene-wise.
 data(Coordinates)
 data(Circ)
 data(Linear)
-Circ.lineplot(Circ,Linear,Coordinates,plotrow=10,groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),x='Ages')
+Circ.lineplot(Circ, Linear, Coordinates, plotrow=10,
+              groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),
+              groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),
+              x='Ages')
 }
 

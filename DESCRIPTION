@@ -8,3 +8,7 @@ License: MIT
 LazyData: true
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
+Imports:
+  aod
+  plyr
+  ggplot2

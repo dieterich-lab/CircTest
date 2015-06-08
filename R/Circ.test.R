@@ -5,7 +5,7 @@
 #' @param Circ CircRNACount file. A file of circRNA read count table. First three columns are circRNA coordinates, and followed by columns for circRNA read counts, each sample per column. 
 #' @param Linear LinearCount file. A file of circRNA host gene expression count table. Same configuration as CircRNACount file.
 #' @param group A vector of group indicators.
-#' @param alpha p value cut off.
+#' @param alpha p value cut off. Defaul 0.05.
 #' @param plotsig If 'TRUE', significantly host-independently regulated circRNAs will be ploted.
 #' @examples
 #' data(Circ)

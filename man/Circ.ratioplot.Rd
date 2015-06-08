@@ -39,5 +39,9 @@ Plot the ratio of circRNAs to the total transcripts (circRNA plus liner RNA).
 data(Coordinates)
 data(Circ)
 data(Linear)
+Circ.ratioplot( Circ, Linear, Coordinates, plotrow=10, 
+                groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),
+                groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3), 
+                lab_legend='Ages' )
 }
 

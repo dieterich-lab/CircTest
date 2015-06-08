@@ -5,13 +5,13 @@
 #' @param Circ CircRNACount file. A file of circRNA read count table. First three columns are circRNA coordinates, and followed by columns for circRNA read counts, each sample per column. 
 #' @param Linear LinearCount file. A file of circRNA host gene expression count table. Same configuration as CircRNACount file.
 #' @param plotrow The rownumber or rowname in the CircRNACount table corresponding the specific gene which you want to plot.
-#' @param size the text size
-#' @param ncol if groupindicator2 is provided, specify the panel layout.
+#' @param size the text size. Default 18.
+#' @param ncol if groupindicator2 is provided, specify the panel layout. Default 2.
 #' @param CircCoordinates BED format circRNA coordinates file. 
 #' @param groupindicator1 A vector of group indicators. For example, ages. 
 #' @param groupindicator2 An other vector of group indicators. For example, tissues. This indicator will be used to segement plots out.
-#' @param x x axis lable
-#' @param y y axis lable
+#' @param x x axis lable. Default 'Conditions'.
+#' @param y y axis lable. Default 'Counts'.
 #' @examples data(Coordinates)
 #' data(Circ)
 #' data(Linear)
@@ -41,10 +41,23 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=2
   Linear <- data.frame(lapply(Linear, as.character), stringsAsFactors=FALSE)
   CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
   
-  groupindicator1 <- as.factor(groupindicator1)
-  groupindicator2 <- as.factor(groupindicator2)
+  groupindicator1 <- factor(groupindicator1,levels=unique(groupindicator1))
+  groupindicator2 <- factor(groupindicator2,levels=unique(groupindicator2))
 
-  # Get gene name, if no annotation, output NA
+  # Get gene name, if no annotation, output NA\
+  if (is.character(plotrow)){
+    if ( ! plotrow %in% rownames(CircCoordinates) ){
+      stop("Specified 'plotrow' not found.")
+    }
+  }else{
+    if ( is.numeric(plotrow) ){
+      if ( ! plotrow %in% 1:nrow(CircCoordinates) ){
+        stop("Specified 'plotrow' not found.")
+      }
+    }else{
+      stop("Specified plotrow should be ONE rowname or ONE rownumber.")
+    }
+  }
   genename = as.character(CircCoordinates[plotrow,4])
   if (genename == '.'){
     genename = NA
