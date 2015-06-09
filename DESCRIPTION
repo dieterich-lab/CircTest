@@ -9,6 +9,6 @@ LazyData: true
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 Imports:
-  aod
-  plyr
+  aod,
+  plyr,
   ggplot2
