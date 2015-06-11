@@ -27,7 +27,7 @@
 Circ.ratioplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='circRNA/(circRNA+Linear)',lab_legend='groupindicator1'){
   require(ggplot2)
   #require(Rmisc)
-  
+
   if( !is.null(groupindicator1) & length(groupindicator1) != ncol(Circ)-3 ){
     stop("If provided, the length of groupindicator1 should be equal to the number of samples.")
   }
@@ -43,9 +43,15 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=
     twolevel <- FALSE
   }
   
+  rownames.circ <- rownames(Circ)
   Circ <- data.frame(lapply(Circ, as.character), stringsAsFactors=FALSE)
+  rownames(Circ) <- rownames.circ
+  rownames.linear <- rownames(Linear)
   Linear <- data.frame(lapply(Linear, as.character), stringsAsFactors=FALSE)
+  rownames(Linear) <- rownames.linear
+  rownames.circCoordinates <- rownames(CircCoordinates)
   CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
+  rownames(CircCoordinates) <- rownames.circCoordinates
   groupindicator1 <- factor(groupindicator1,levels=unique(groupindicator1))
   groupindicator2 <- factor(groupindicator2,levels=unique(groupindicator2))
   

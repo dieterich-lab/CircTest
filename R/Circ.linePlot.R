@@ -37,12 +37,17 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=2
     twolevel <- FALSE
   }
   
+  rownames.circ <- rownames(Circ)
   Circ <- data.frame(lapply(Circ, as.character), stringsAsFactors=FALSE)
+  rownames(Circ) <- rownames.circ
+  rownames.linear <- rownames(Linear)
   Linear <- data.frame(lapply(Linear, as.character), stringsAsFactors=FALSE)
+  rownames(Linear) <- rownames.linear
+  rownames.circCoordinates <- rownames(CircCoordinates)
   CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
-  
+  rownames(CircCoordinates) <- rownames.circCoordinates
   groupindicator1 <- factor(groupindicator1,levels=unique(groupindicator1))
-  groupindicator2 <- factor(groupindicator2,levels=unique(groupindicator2))
+  groupindicator2 <- factor(groupindicator2,levels=unique(groupindicator2))  
 
   # Get gene name, if no annotation, output NA\
   if (is.character(plotrow)){

@@ -19,7 +19,7 @@ Circ.filter <- function(circ=circ,linear=linear,Nreplicates=6,filter.sample=4,fi
     if ( sum(circ[i,-c(1:3)]>=filter.count)<filter.sample | circ_max_perc(circ[i,-c(1:3)], linear[i,-c(1:3)],Nreplicates=Nreplicates)<percentage)
       del_row = c(del_row,i)
   }
-  new_dat=dat[-del_row,]
+  new_dat=circ[-del_row,]
   return(new_dat)
 }
 
