@@ -6,7 +6,7 @@ Because it's a private repo, you need a auth_token, see how to generate one http
 with `devtools`:
 
 ```S
-install.packages("devtools")
-require(devtools)
+> install.packages("devtools")
+> require(devtools)
 > install_github('dieterich-lab/CircTest',username='username')
 ```
