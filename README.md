@@ -1,10 +1,16 @@
-# CircTest
+# CircTest: test the variation of circRNAs in respect to host genes.
 # Installation
-Because it's a private repo, you need a auth_token, see how to generate one https://help.github.com/articles/creating-an-access-token-for-command-line-use/
 
-### install
 with `devtools`:
 
 ```S
-devtools::install_github('dieterich-lab/CircTest',username='username',auth_token='this is example: 8ddcd2f36b5056bf8dd2')
+> install.packages("devtools")
+> require(devtools)
+> install_github('dieterich-lab/CircTest',username='username')
 ```
+
+# Usage
+
+CircTest is strongly recommended to work with the output of DCC: https://github.com/dieterich-lab/DCC, otherwise, you need to organise your data in the same format as DCC outputs.
+
+For a brief demonstration of usage, please refer to DCC page: https://github.com/dieterich-lab/DCC/blob/master/README.rst#test-for-host-independently-regulated-circrnas-with-circtest-package
