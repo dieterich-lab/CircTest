@@ -62,7 +62,7 @@ Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=
     # test models
     a <- anova(fitNull,fitAlt)
     p.value <- a@anova.table[,11][2]
-    print(p.value)
+    #print(p.value)
     p.val <- c( p.val, p.value ) 
   }
   
