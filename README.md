@@ -13,16 +13,8 @@ with `devtools`:
 
 CircTest is strongly recommended to work with the output of DCC: https://github.com/dieterich-lab/DCC, otherwise, you need to organise your data in the same format as DCC outputs.
 
-For a brief demonstration of usage, please refer to DCC page: https://github.com/dieterich-lab/DCC/blob/master/README.rst#test-for-host-independently-regulated-circrnas-with-circtest-package
 
-
-========================================================================
-Test for host-independently regulated circRNAs with CircTest package
-========================================================================
-
-1) Install CircTest package as described: https://github.com/dieterich-lab/CircTest
-
-2) Read and load DCC output into R
+1) Read and load DCC output into R
 
 ```S
 
@@ -51,7 +43,7 @@ Alternatively, load the processed Westholm et al. data from CircTest package.
   LinearCount_filtered <- Linear
 ```
 
-3) Test for host-independently regulated circRNAs
+2) Test for host-independently regulated circRNAs
 
 ```S
 
@@ -60,7 +52,7 @@ Alternatively, load the processed Westholm et al. data from CircTest package.
  View(test$summary_table)
 ```
 
-4) Visuallize the significantly host-independently regulated circRNAs
+3) Visuallize the significantly host-independently regulated circRNAs
 
 ```S
 
