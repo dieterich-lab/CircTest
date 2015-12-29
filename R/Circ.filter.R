@@ -13,10 +13,10 @@
 #' @export Circ.filter
 #' 
 
-Circ.filter <- function(circ=circ,linear=linear,Nreplicates=6,filter.sample=4,filter.count=5,percentage=1){
+Circ.filter <- function(circ=circ,linear=linear,Nreplicates=6,filter.sample=4,filter.count=5,percentage=1, circle_description=c(1:3)){
   del_row=c()
   for ( i in 1:nrow(circ) ){
-    if ( sum(circ[i,-c(1:3)]>=filter.count)<filter.sample | circ_max_perc(circ[i,-c(1:3)], linear[i,-c(1:3)],Nreplicates=Nreplicates)<percentage)
+    if ( sum(circ[i,-circle_description]>=filter.count)<filter.sample | circ_max_perc(circ[i,-circle_description], linear[i,-circle_description],Nreplicates=Nreplicates)<percentage)
       del_row = c(del_row,i)
   }
   new_dat=circ[-del_row,]

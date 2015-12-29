@@ -24,14 +24,14 @@
 #' 
 #' @export Circ.ratioplot
 #' 
-Circ.ratioplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='circRNA/(circRNA+Linear)',lab_legend='groupindicator1'){
+Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='circRNA/(circRNA+Linear)',lab_legend='groupindicator1', circle_description = c(1:3), gene_column = None){
   require(ggplot2)
   #require(Rmisc)
 
-  if( !is.null(groupindicator1) & length(groupindicator1) != ncol(Circ)-3 ){
+  if( !is.null(groupindicator1) & length(groupindicator1) != ncol(Circ)-length(circle_description) ){
     stop("If provided, the length of groupindicator1 should be equal to the number of samples.")
   }
-  if( !is.null(groupindicator2) & length(groupindicator2) != ncol(Circ)-3 ){
+  if( !is.null(groupindicator2) & length(groupindicator2) != ncol(Circ)-length(circle_description) ){
     stop("If provided, the length of groupindicator2 should be equal to the number of samples.")
   }
   if(is.null(groupindicator1)){
@@ -46,12 +46,23 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=
   rownames.circ <- rownames(Circ)
   Circ <- data.frame(lapply(Circ, as.character), stringsAsFactors=FALSE)
   rownames(Circ) <- rownames.circ
+  
   rownames.linear <- rownames(Linear)
   Linear <- data.frame(lapply(Linear, as.character), stringsAsFactors=FALSE)
   rownames(Linear) <- rownames.linear
-  rownames.circCoordinates <- rownames(CircCoordinates)
-  CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
-  rownames(CircCoordinates) <- rownames.circCoordinates
+  
+  if(!missing(CircCoordinates)){
+    rownames.circCoordinates <- rownames(CircCoordinates)
+    CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
+    rownames(CircCoordinates) <- rownames.circCoordinates
+  }else{
+    CircCoordinates <- Circ[,circle_description]
+    rownames(CircCoordinates) <- rownames.circ
+    rownames.circCoordinates <- rownames(CircCoordinates)
+    CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
+    rownames(CircCoordinates) <- rownames.circCoordinates  
+  }
+  
   groupindicator1 <- factor(groupindicator1,levels=unique(groupindicator1))
   groupindicator2 <- factor(groupindicator2,levels=unique(groupindicator2))
   
@@ -69,18 +80,22 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=
       stop("Specified plotrow should be ONE rowname or ONE rownumber.")
     }
   }
-  genename <- as.character(CircCoordinates[plotrow,4])
-  if (genename == '.'){
-    genename = NA
-  }
   
+  if (missing(gene_column)){
+    genename = NULL
+  }else{
+    genename <- as.character(CircCoordinates[plotrow,gene_column])
+    if (genename == '.'){
+      genename = NULL
+    }
+  }
   if(twolevel){
-    plotdat <- summarySE( data.frame(Ratio=as.numeric(Circ[plotrow,-c(1:3)])/(as.numeric(Linear[plotrow,-c(1:3)])+as.numeric(Circ[plotrow,-c(1:3)])),
+    plotdat <- summarySE( data.frame(Ratio=as.numeric(Circ[plotrow,-circle_description])/(as.numeric(Linear[plotrow,-circle_description])+as.numeric(Circ[plotrow,-circle_description])),
                                     groupindicator1,
                                     groupindicator2),
                          measurevar='Ratio',groupvars=c('groupindicator1','groupindicator2') )
   }else{
-    plotdat <- summarySE( data.frame(Ratio=as.numeric(Circ[plotrow,-c(1:3)])/(as.numeric(Linear[plotrow,-c(1:3)])+as.numeric(Circ[plotrow,-c(1:3)])),
+    plotdat <- summarySE( data.frame(Ratio=as.numeric(Circ[plotrow,-circle_description])/(as.numeric(Linear[plotrow,-circle_description])+as.numeric(Circ[plotrow,-circle_description])),
                                      groupindicator1),
                                      measurevar='Ratio',groupvars=c('groupindicator1') )
   }
@@ -88,8 +103,7 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=
   Q <- ggplot(plotdat, aes(x=groupindicator1, y=Ratio)) +
        theme(text=element_text(size=size))+
        theme_bw()+
-       labs(list(title=paste(toString(Circ[plotrow,c(1:3)]),genename,sep=" "),x=x,y=y))+
-       #ggtitle(toString(Circ[plotrow,c(1:3)]))+
+       labs(list(title=paste(toString(Circ[plotrow,circle_description]),genename,sep=" "),x=x,y=y))+
        geom_errorbar(aes(ymin=Ratio-se, ymax=Ratio+se), width=.1 )+   # Width of the error bars
        geom_bar(stat="identity",aes(fill=groupindicator1))+
        scale_fill_discrete(name=lab_legend)

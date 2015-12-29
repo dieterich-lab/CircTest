@@ -17,7 +17,7 @@
 #' data(Linear)
 #' Circ.lineplot(Circ,Linear,Coordinates,plotrow=10,groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),x='Ages')
 #' @export Circ.lineplot
-Circ.lineplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='Counts'){
+Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='Counts', circle_description = c(1:3), gene_column = None){
   
   require(ggplot2)
   #require(Rmisc)
@@ -40,12 +40,23 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=2
   rownames.circ <- rownames(Circ)
   Circ <- data.frame(lapply(Circ, as.character), stringsAsFactors=FALSE)
   rownames(Circ) <- rownames.circ
+  
   rownames.linear <- rownames(Linear)
   Linear <- data.frame(lapply(Linear, as.character), stringsAsFactors=FALSE)
   rownames(Linear) <- rownames.linear
-  rownames.circCoordinates <- rownames(CircCoordinates)
-  CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
-  rownames(CircCoordinates) <- rownames.circCoordinates
+  
+  if(!missing(CircCoordinates)){
+    rownames.circCoordinates <- rownames(CircCoordinates)
+    CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
+    rownames(CircCoordinates) <- rownames.circCoordinates
+  }else{
+    CircCoordinates <- Circ[,circle_description]
+    rownames(CircCoordinates) <- rownames.circ
+    rownames.circCoordinates <- rownames(CircCoordinates)
+    CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
+    rownames(CircCoordinates) <- rownames.circCoordinates  
+  }
+  
   groupindicator1 <- factor(groupindicator1,levels=unique(groupindicator1))
   groupindicator2 <- factor(groupindicator2,levels=unique(groupindicator2))  
 
@@ -63,30 +74,35 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates,plotrow='1',size=18,ncol=2
       stop("Specified plotrow should be ONE rowname or ONE rownumber.")
     }
   }
-  genename = as.character(CircCoordinates[plotrow,4])
-  if (genename == '.'){
-    genename = NA
+
+  if (missing(gene_column)){
+    genename = NULL
+  }else{
+    genename <- as.character(CircCoordinates[plotrow,gene_column])
+    if (genename == '.'){
+      genename = NULL
+    }
   }
   
   plot.func <- function(row=plotrow){
     if(twolevel){
-      plotdat <- summarySE(data.frame(Counts=c(as.numeric(Circ[row,-c(1:3)]),as.numeric(Linear[row,-c(1:3)])),
+      plotdat <- summarySE(data.frame(Counts=c(as.numeric(Circ[row,-circle_description]),as.numeric(Linear[row,-circle_description])),
                                       groupindicator1,
                                       groupindicator2,
-                                      Type=c(rep('circRNA',ncol(Circ)-3),rep('linear RNA',ncol(Circ)-3))
+                                      Type=c(rep('circRNA',ncol(Circ)-length(circle_description)),rep('linear RNA',ncol(Circ)-length(circle_description)))
       ), measurevar='Counts',groupvars=c('Type','groupindicator1','groupindicator2') )
     }else{
-      plotdat <- summarySE(data.frame(Counts=c(as.numeric(Circ[row,-c(1:3)]),as.numeric(Linear[row,-c(1:3)])),
+      plotdat <- summarySE(data.frame(Counts=c(as.numeric(Circ[row,-circle_description]),as.numeric(Linear[row,-circle_description])),
                                       groupindicator1,
-                                      Type=c(rep('circRNA',ncol(Circ)-3),rep('linear RNA',ncol(Circ)-3))
+                                      Type=c(rep('circRNA',ncol(Circ)-length(circle_description)),rep('linear RNA',ncol(Circ)-length(circle_description)))
       ), measurevar='Counts',groupvars=c('Type','groupindicator1') )
     }
 
     Q=ggplot(plotdat, aes(x=groupindicator1, y=Counts, group=Type,colour=Type)) +   
       theme(text=element_text(size=size))+
       theme_bw()+
-      labs( list(title=paste(toString(Circ[row,c(1:3)]),genename,sep=" "),x=x,y=y) ) +
-      ggtitle(toString(Circ[row,c(1:3)]))+
+      labs( list(title=paste(toString(Circ[row,circle_description]),genename,sep=" "),x=x,y=y) ) +
+      ggtitle(paste(toString(Circ[row,circle_description]),genename,sep=" "))+
       geom_errorbar(aes(ymin=Counts-se, ymax=Counts+se), width=.1, position=position_dodge(.1) ) +   
       geom_line(position=position_dodge(.1)) +
       geom_point(position=position_dodge(.1))

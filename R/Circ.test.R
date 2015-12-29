@@ -8,16 +8,17 @@
 #' @param group A vector of group indicators.
 #' @param alpha p value cut off. Defaul 0.05.
 #' @param plotsig If 'TRUE', significantly host-independently regulated circRNAs will be ploted.
+#' @param circle_description Column indices which do not carry circle/linear read counts.
 #' @examples
 #' data(Circ)
 #' data(Linear)
 #' test=Circ.test(Circ=Circ,Linear=Linear,group=c(rep(1,6),rep(2,6),rep(3,6)))
 #' View(test$sig.dat)
 #' # Plot one of them
-#' Circ.ratioplot(Circ,Linear,Coordinates,plotrow=rownames(test$sig.dat)[1],groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),lab_legend='Ages')
+#' Circ.ratioplot(Circ,Linear,Coordinates,plotrow=rownames(test$sig.dat)[1],groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),lab_legend='Ages', circle_description = c(1:3))
 #' @export Circ.test
 
-Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=T){
+Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=T, circle_description = c(1:3)){
   # Requre packge
   require(aod)
   
@@ -30,7 +31,7 @@ Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=
   p.val <- c()
   
   # groups
-  if ( length(group) != ncol(Circ)-3 ){
+  if ( length(group) != ncol(Circ)-length(circle_description) ){
     stop("length of 'group' must be equal to the number of samples of 'Circ' and 'Linear'. ")
   }
   group <- factor(group)
@@ -40,10 +41,10 @@ Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=
   for ( i in rownames(Circ) ){
     #print (i)    
     # total read counts vector
-    tot <- round( as.numeric(Linear[i,c(4:ncol(Circ))]) + as.numeric(Circ[i,c(4:ncol(Linear))]) )
+    tot <- round( as.numeric(Linear[i,-circle_description]) + as.numeric(Circ[i,-circle_description]) )
 
     # circRNA read counts
-    circ <- as.numeric(Circ[i,c(4:ncol(Circ))])
+    circ <- as.numeric(Circ[i,-circle_description])
 
     
     # if there is 0 in the total count vector, the model will fail. So permute 0 to 1
@@ -75,7 +76,7 @@ Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=
   sig_p <- sort(sig_p)
   # A summary table
   if (missing(CircCoordinates)){
-    summary_table <- cbind(sig_dat[,c(1:3)],sig_p)
+    summary_table <- cbind(sig_dat[,circle_description],sig_p)
   }else{
     summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p)
   }
