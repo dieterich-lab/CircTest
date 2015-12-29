@@ -14,13 +14,15 @@
 #' @param x x axis lable. Default 'Conditions'.
 #' @param y y axis lable. Default 'circRNA/(circRNA+Linear)'.
 #' @param lab_legend legend title
+#' @param circle_description Column indices which do not carry circle/linear read counts.
+#' @param gene_column Column index of the column containing the gene name in CircCoordinates if available, otherwise its chosen from Circ.
 #' @examples data(Coordinates)
 #' data(Circ)
 #' data(Linear)
 #' @examples data(Coordinates)
 #' data(Circ)
 #' data(Linear)
-#' Circ.ratioplot(Circ,Linear,Coordinates,plotrow=10,groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),lab_legend='Ages')
+#' Circ.ratioplot(Circ,Linear,Coordinates,plotrow=10,groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),lab_legend='Ages', circle_description = c(1:3), gene_column = 4)
 #' 
 #' @export Circ.ratioplot
 #' 
@@ -66,7 +68,7 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=1
   groupindicator1 <- factor(groupindicator1,levels=unique(groupindicator1))
   groupindicator2 <- factor(groupindicator2,levels=unique(groupindicator2))
   
-  # Get gene name, if no annotation, output NA
+  # Get gene name, if no annotation, output NULL
   if (is.character(plotrow)){
     if ( ! plotrow %in% rownames(CircCoordinates) ){
       stop("Specified 'plotrow' not found.")
@@ -80,7 +82,7 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=1
       stop("Specified plotrow should be ONE rowname or ONE rownumber.")
     }
   }
-  
+  # Choose your own column containing the gene name using gene_column. The genename will be displayed in the plot title if available
   if (missing(gene_column)){
     genename = NULL
   }else{

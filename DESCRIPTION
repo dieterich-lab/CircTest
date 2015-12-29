@@ -3,12 +3,16 @@ Title: Test circRNA dependence on host genes
 Version: 0.1.0
 Authors@R: person("Jun", "Cheng", email = "s6juncheng@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph)
-Depends: R (>= 3.1.0)
+Depends:
+    R (>= 3.1.0)
 License: GPL
 LazyData: true
-Suggests: knitr, rmarkdown
+Suggests:
+    knitr,
+    rmarkdown
 VignetteBuilder: knitr
 Imports:
-  aod,
-  plyr,
-  ggplot2
+    aod,
+    plyr,
+    ggplot2
+RoxygenNote: 5.0.1

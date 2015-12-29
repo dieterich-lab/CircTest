@@ -10,6 +10,7 @@
 #' @param filter.count The minimum read count used for filtering. 
 #' @param filter.sample The minimum number of samples need to have above filter.count number of circRNA supporting reads.
 #' @param percentage The minimum percentage of circRNAs account for the total transcripts in at leat one group.
+#' @param circle_description Column indices which do not carry circle/linear read counts.
 #' @export Circ.filter
 #' 
 

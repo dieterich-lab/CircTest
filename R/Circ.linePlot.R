@@ -12,10 +12,12 @@
 #' @param groupindicator2 An other vector of group indicators. For example, tissues. This indicator will be used to segement plots out.
 #' @param x x axis lable. Default 'Conditions'.
 #' @param y y axis lable. Default 'Counts'.
+#' @param circle_description Column indices which do not carry circle/linear read counts.
+#' @param gene_column Column index of the column containing the gene name in CircCoordinates if available, otherwise its chosen from Circ.
 #' @examples data(Coordinates)
 #' data(Circ)
 #' data(Linear)
-#' Circ.lineplot(Circ,Linear,Coordinates,plotrow=10,groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),x='Ages')
+#' Circ.lineplot(Circ,Linear,Coordinates,plotrow=10,groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),x='Ages',circle_description = c(1:3), gene_column = 4 )
 #' @export Circ.lineplot
 Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='Counts', circle_description = c(1:3), gene_column = None){
   
@@ -45,6 +47,7 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
   Linear <- data.frame(lapply(Linear, as.character), stringsAsFactors=FALSE)
   rownames(Linear) <- rownames.linear
   
+  # if CircCoordinates are available, use them, otherwise get more information from the Circ table, as indicated by the circle_description columns.
   if(!missing(CircCoordinates)){
     rownames.circCoordinates <- rownames(CircCoordinates)
     CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
@@ -60,7 +63,7 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
   groupindicator1 <- factor(groupindicator1,levels=unique(groupindicator1))
   groupindicator2 <- factor(groupindicator2,levels=unique(groupindicator2))  
 
-  # Get gene name, if no annotation, output NA\
+  # Get gene name, if no annotation, output NULL
   if (is.character(plotrow)){
     if ( ! plotrow %in% rownames(CircCoordinates) ){
       stop("Specified 'plotrow' not found.")
@@ -74,7 +77,7 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
       stop("Specified plotrow should be ONE rowname or ONE rownumber.")
     }
   }
-
+  # Choose your own column containing the gene name using gene_column. The genename will be displayed in the plot title if available
   if (missing(gene_column)){
     genename = NULL
   }else{
