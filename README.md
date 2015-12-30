@@ -8,10 +8,32 @@ with `devtools`:
 > require(devtools)
 > install_github('dieterich-lab/CircTest')
 ```
-
 # Usage
 
-CircTest is strongly recommended to work with the output of DCC: https://github.com/dieterich-lab/DCC, otherwise, you need to organise your data in the same format as DCC outputs.
+
+# Usage with DCC output
+
+CircTest is strongly recommended to work with the output of DCC: https://github.com/dieterich-lab/DCC, but can also run on your own tables. 
+All you need is one table with circular counts and one with host-gene counts. These tables should have the same order, i.e. circ[i,j] and host[i,j] are read-counts for the same circle in the same sample.
+Your table may have as many columns describing the circle or just one column with a circle ID followed by as many columns with counts.
+
+Example tables:
+
+```S
+ # circRNA
+
+   CircID	SRR1197279	SRR1197275	SRR1197273	SRR1197274
+ 1	2L:227372|231034	22	14	22	16
+ 2	2L:2704926|2712136	3	7	8	8
+ 3	2L:5274019|5275780	1	0	1	1
+ 4	2L:5850831|5853258	1	1	4	3
+ 5	2L:7107141|7107551	5	6	6	6
+ 6	2L:8377523|8377575	12	4	8	6
+
+ # linear
+
+```
+
 
 
 1) Read and load DCC output into R
