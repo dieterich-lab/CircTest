@@ -1,0 +1,6 @@
+CircID	Chr	Start	End	Gene
+chr1:100|800	chr1	100	800	Gene_A
+chr1:1050|10080	chr1	1050	10080	Gene_B
+chr2: 600|1000	chr2	600	1000	Gene_C
+chr10:4100|5400	chr10	4100	5400	Gene_D
+chr11:600|1500	chr11	600	1500	Gene_E

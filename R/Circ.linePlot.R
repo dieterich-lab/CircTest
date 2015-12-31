@@ -105,7 +105,7 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
       theme(text=element_text(size=size))+
       theme_bw()+
       labs( list(title=paste(toString(Circ[row,circle_description]),genename,sep=" "),x=x,y=y) ) +
-      ggtitle(toString(Circ[row,circle_description]))+      
+      ggtitle(paste(toString(Circ[row,circle_description]),genename,sep=" "))+      
       geom_errorbar(aes(ymin=Counts-se, ymax=Counts+se), width=.1, position=position_dodge(.1) ) +   
       geom_line(position=position_dodge(.1)) +
       geom_point(position=position_dodge(.1))

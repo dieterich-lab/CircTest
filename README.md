@@ -49,11 +49,11 @@ Example tables:
 2) Filter tables 
 To model expression data using the beta binomial distribution and testing for differences in groups, it is benefical to only test well supported circles. You can use the package's function **Circ.filter** to filter your tables.
 
-**Nreplicates** specifies the number of replicates in each condition.
-**filter.sample** specifies the number of samples the circle has to have enough circular reads in to be considered.
-**filter.count** specifies the circular read count threshold.
-**percentage** specifies the minimum circle to host-gene ratio.
-**circle_description** tells the function which columns are NOT filled with read counts but the circle's annotation.
+**Nreplicates** specifies the number of replicates in each condition.  
+**filter.sample** specifies the number of samples the circle has to have enough circular reads in to be considered.  
+**filter.count** specifies the circular read count threshold.  
+**percentage** specifies the minimum circle to host-gene ratio.  
+**circle_description** tells the function which columns are NOT filled with read counts but the circle's annotation.  
 
 ```S
   # filter circles by read counts
