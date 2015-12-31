@@ -16,7 +16,7 @@ These tables should have the same order, i.e. circ[i,j] and linear[i,j] are read
 
 # Usage
 
-Your table may have as many columns describing the circle or just one column containing the circle ID followed by as many columns of read counts.
+Your table may have many columns describing the circle or just one column containing the circle ID followed by many columns of read counts.
 
 Example tables:
 
@@ -73,7 +73,7 @@ To model expression data using the beta binomial distribution and testing for di
 
 3) Test for changes
 
-**Circ.test** uses the beta binomial distribution to model the data and performs an ANOVA to identify circles which differ in their relative expression between the groups.
+**Circ.test** uses the beta binomial distribution to model the data and performs an ANOVA to identify circles which differ in their relative expression between the groups.  
 It is important that the grouping is correct (**group**) and the non-read-count columuns are specified (**circle_description**).
 
 ```S
@@ -98,7 +98,7 @@ It is important that the grouping is correct (**group**) and the non-read-count 
   ```
 4) Visualize data
 
-The CircTest library has build in plot functions to view your significantly different genes.
+The CircTest library has build in plot functions to view your significantly different genes.  
 To visualize the ratio as barplot try:
 ```S
   for (i in rownames(test$summary_table))  { 
@@ -115,7 +115,7 @@ To visualize the abundance of host-gene and circle separately in a line plot try
  }
 ```
 
-More examples on how to deal with different data can be found in the **example_data** folder 
+More examples on how to deal with different data can be found in the **example_data** folder.  
 
 # Usage with DCC output
 
