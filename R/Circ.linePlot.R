@@ -113,7 +113,7 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
       Q = Q + facet_wrap( ~ groupindicator2,ncol=ceiling(sqrt(length(levels(groupindicator2)))) )
     }
     
-    return(Q)
+    print(Q)
   }
   
   return(plot.func(row=plotrow))
