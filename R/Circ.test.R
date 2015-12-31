@@ -76,7 +76,9 @@ Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=
   sig_p <- sort(sig_p)
   # A summary table
   if (missing(CircCoordinates)){
-    summary_table <- cbind(sig_dat[,circle_description],sig_p)
+    summary_table <- data.frame(sig_dat[,circle_description],sig_p)
+    rownames(summary_table) <- rownames(sig_dat)
+    names(summary_table) <- c(names(sig_dat)[circle_description], 'sig_p')
   }else{
     summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p)
   }

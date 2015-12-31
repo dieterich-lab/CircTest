@@ -58,7 +58,7 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=1
     CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
     rownames(CircCoordinates) <- rownames.circCoordinates
   }else{
-    CircCoordinates <- Circ[,circle_description]
+    CircCoordinates <- data.frame(Circ[,circle_description])
     rownames(CircCoordinates) <- rownames.circ
     rownames.circCoordinates <- rownames(CircCoordinates)
     CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)

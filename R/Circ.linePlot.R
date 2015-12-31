@@ -24,10 +24,10 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
   require(ggplot2)
   #require(Rmisc)
   
-  if( !is.null(groupindicator1) & length(groupindicator1) != ncol(Circ)-3 ){
+  if( !is.null(groupindicator1) & length(groupindicator1) != ncol(Circ)-length(circle_description) ){
     stop("If provided, the length of groupindicator1 should be equal to the number of samples.")
   }
-  if( !is.null(groupindicator2) & length(groupindicator2) != ncol(Circ)-3 ){
+  if( !is.null(groupindicator2) & length(groupindicator2) != ncol(Circ)-length(circle_description) ){
     stop("If provided, the length of groupindicator2 should be equal to the number of samples.")
   }
   if(is.null(groupindicator1)){
@@ -53,7 +53,7 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
     CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
     rownames(CircCoordinates) <- rownames.circCoordinates
   }else{
-    CircCoordinates <- Circ[,circle_description]
+    CircCoordinates <- data.frame(Circ[,circle_description])
     rownames(CircCoordinates) <- rownames.circ
     rownames.circCoordinates <- rownames(CircCoordinates)
     CircCoordinates <- data.frame(lapply(CircCoordinates, as.character), stringsAsFactors=FALSE)
@@ -105,7 +105,7 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
       theme(text=element_text(size=size))+
       theme_bw()+
       labs( list(title=paste(toString(Circ[row,circle_description]),genename,sep=" "),x=x,y=y) ) +
-      ggtitle(paste(toString(Circ[row,circle_description]),genename,sep=" "))+
+      ggtitle(toString(Circ[row,circle_description]))+      
       geom_errorbar(aes(ymin=Counts-se, ymax=Counts+se), width=.1, position=position_dodge(.1) ) +   
       geom_line(position=position_dodge(.1)) +
       geom_point(position=position_dodge(.1))
@@ -118,3 +118,6 @@ Circ.lineplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18
   
   return(plot.func(row=plotrow))
 }
+
+
+
