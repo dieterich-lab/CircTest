@@ -18,24 +18,27 @@ These tables should have the same order, i.e. circ[i,j] and linear[i,j] are read
 
 Your table may have many columns describing the circle or just one column containing the circle ID followed by many columns of read counts.
 
-Example tables:
-
-```S
-  Circ
-  #            CircID Control_1 Control_2 Control_3 Treatment_1 Treatment_2 Treatment_3
-  # 1    chr1:100|800         0         2         1           5           4           0
-  # 2 chr1:1050|10080        20        22        21          10          13           0
-  # 3  chr2: 600|1000         0         1         0          10           0           1
-  # 4 chr10:4100|5400        55        54        52          56          53          50
-  # 5  chr11:600|1500         3         0         1           2           2           3
+Example tables:  
   
-  Linear
-  #            CircID Control_1 Control_2 Control_3 Treatment_1 Treatment_2 Treatment_3
-  # 1    chr1:100|800        10        11        12           9          10          10
-  # 2 chr1:1050|10080        80        81        83          45          48          46
-  # 3  chr2: 600|1000         5         5         2          12           8           7
-  # 4 chr10:4100|5400       101       110       106         150         160         153
-  # 5  chr11:600|1500        20        21        18          19          20          20
+Count table for back-spliced reads:
+```S
+
+           CircID Control_1 Control_2 Control_3 Treatment_1 Treatment_2 Treatment_3
+     chr1:100|800         0         2         1           5           4           0
+  chr1:1050|10080        20        22        21          10          13           0
+   chr2: 600|1000         0         1         0          10           0           1
+  chr10:4100|5400        55        54        52          56          53          50
+   chr11:600|1500         3         0         1           2           2           3
+ ```
+   
+Count table for host-gene reads:
+```S
+          CircID Control_1 Control_2 Control_3 Treatment_1 Treatment_2 Treatment_3
+    chr1:100|800        10        11        12           9          10          10
+ chr1:1050|10080        80        81        83          45          48          46
+  chr2: 600|1000         5         5         2          12           8           7
+ chr10:4100|5400       101       110       106         150         160         153
+  chr11:600|1500        20        21        18          19          20          20
 
 ```
 
