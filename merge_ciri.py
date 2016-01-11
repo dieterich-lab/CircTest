@@ -126,9 +126,9 @@ def write_circle_files(output_folder, circles, sample_dict, threshold):
 		    O_no_jun_reads.write('\t%s' %(sample_dict[forrest][lola][4]))
 		    O_ratio.write('\t%s' %(sample_dict[forrest][lola][5]))
 		else:
-		    O_jun_reads.write('\t0')
-		    O_no_jun_reads.write('\t0')
-		    O_ratio.write('\t0')
+		    O_jun_reads.write('\tNA')
+		    O_no_jun_reads.write('\tNA')
+		    O_ratio.write('\tNA')
 	    
 	    # finish up the line
 	    O_jun_reads.write('\n')
