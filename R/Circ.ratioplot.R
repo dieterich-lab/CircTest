@@ -16,19 +16,19 @@
 #' @param lab_legend legend title
 #' @param circle_description Column indices which do not carry circle/linear read counts.
 #' @param gene_column Column index of the column containing the gene name in CircCoordinates if available, otherwise its chosen from Circ.
+#' @param y_axis_range Range of the y axis to keep all plots withint he same range
 #' @examples data(Coordinates)
 #' data(Circ)
 #' data(Linear)
 #' @examples data(Coordinates)
 #' data(Circ)
 #' data(Linear)
-#' Circ.ratioplot(Circ,Linear,Coordinates,plotrow=10,groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),lab_legend='Ages', circle_description = c(1:3), gene_column = 4)
+#' Circ.ratioplot(Circ,Linear,Coordinates,plotrow=10,groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),lab_legend='Ages', circle_description = c(1:3), gene_column = 4, y_axis_range = 1)
 #' 
 #' @export Circ.ratioplot
 #' 
-Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='circRNA/(circRNA+Linear)',lab_legend='groupindicator1', circle_description = c(1:3), gene_column = None){
+Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=18,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='circRNA/(circRNA+Linear)',lab_legend='groupindicator1', circle_description = c(1:3), gene_column = None, y_axis_range = 1){
   require(ggplot2)
-  #require(Rmisc)
 
   if( !is.null(groupindicator1) & length(groupindicator1) != ncol(Circ)-length(circle_description) ){
     stop("If provided, the length of groupindicator1 should be equal to the number of samples.")
@@ -109,7 +109,8 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=1
        labs(list(title=paste(toString(Circ[plotrow,circle_description]),genename,sep=" "),x=x,y=y))+
        geom_bar(stat="identity",aes(fill=groupindicator1))+
        geom_errorbar(aes(ymin=Ratio-se, ymax=Ratio+se), width=.1 )+   # Width of the error bars
-       scale_fill_discrete(name=lab_legend)
+       scale_fill_discrete(name=lab_legend)+
+       ylim(0, y_axis_range)
   if(twolevel){
     Q <- Q + facet_wrap( ~ groupindicator2,ncol=ncol )
   }
