@@ -6,7 +6,7 @@
 #' @param Linear LinearCount file. A file of circRNA host gene expression count table. Same configuration as CircRNACount file.
 #' @param (Optional) CircCoordinates BED format circRNA coordinates file.
 #' @param group A vector of group indicators.
-#' @param alpha p value cut off. Defaul 0.05.
+#' @param alpha p value cut off (FDR). Default 0.05.
 #' @param plotsig If 'TRUE', significantly host-independently regulated circRNAs will be ploted.
 #' @param circle_description Column indices which do not carry circle/linear read counts.
 #' @examples
@@ -40,7 +40,6 @@ Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=
   ## test
   # constract test matrix for each circRNA
   for ( i in rownames(Circ) ){
-    #print (i)
     # total read counts vector
     tot <- round( as.numeric(Linear[i,-circle_description]) + as.numeric(Circ[i,-circle_description]) )
 
