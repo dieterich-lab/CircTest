@@ -1,6 +1,6 @@
 Package: CircTest
 Title: Test circRNA dependence on host genes
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("Jun", "Cheng", email = "s6juncheng@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph)
 Depends:
