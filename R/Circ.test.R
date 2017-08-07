@@ -1,10 +1,10 @@
 #' @title Circ.test
-#' 
+#'
 #' @description
-#' Test the independent variation of circRNAs in relevant to their host genes. 
-#' @param Circ CircRNACount file. A file of circRNA read count table. First three columns are circRNA coordinates, and followed by columns for circRNA read counts, each sample per column. 
+#' Test the independent variation of circRNAs in relevant to their host genes.
+#' @param Circ CircRNACount file. A file of circRNA read count table. First three columns are circRNA coordinates, and followed by columns for circRNA read counts, each sample per column.
 #' @param Linear LinearCount file. A file of circRNA host gene expression count table. Same configuration as CircRNACount file.
-#' @param (Optional) CircCoordinates BED format circRNA coordinates file. 
+#' @param (Optional) CircCoordinates BED format circRNA coordinates file.
 #' @param group A vector of group indicators.
 #' @param alpha p value cut off. Defaul 0.05.
 #' @param plotsig If 'TRUE', significantly host-independently regulated circRNAs will be ploted.
@@ -21,15 +21,16 @@
 Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=T, circle_description = c(1:3)){
   # Requre packge
   require(aod)
-  
+
   # check whether the input matrix are correct
   if ( nrow(Circ)!=nrow(Linear) | ncol(Circ) != ncol(Linear)){
     stop('Circ data and Linear data are not matched, dimention different.')
   }
-  
-  # A vector for pvalue
+
+  # A vector for pvalue and directions indicator
   p.val <- c()
-  
+  direction <- c()
+
   # groups
   if ( length(group) != ncol(Circ)-length(circle_description) ){
     stop("length of 'group' must be equal to the number of samples of 'Circ' and 'Linear'. ")
@@ -37,24 +38,24 @@ Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=
   group <- factor(group)
 
   ## test
-  # constract test matrix for each circRNA  
+  # constract test matrix for each circRNA
   for ( i in rownames(Circ) ){
-    #print (i)    
+    #print (i)
     # total read counts vector
     tot <- round( as.numeric(Linear[i,-circle_description]) + as.numeric(Circ[i,-circle_description]) )
 
     # circRNA read counts
     circ <- as.numeric(Circ[i,-circle_description])
 
-    
+
     # if there is 0 in the total count vector, the model will fail. So permute 0 to 1
     if ( 0 %in% tot ){
       tot[tot==0]=1
     }
-    
+
     # Constract data frame
     testdat = data.frame(tot,circ,group)
-    
+
     ## do test
     # Null model
     fitNull <- betabin(cbind(circ,tot-circ) ~ 1, ~ 1, data=testdat)
@@ -63,24 +64,42 @@ Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=
     # test models
     a <- anova(fitNull,fitAlt)
     p.value <- a@anova.table[,11][2]
-    #print(p.value)
-    p.val <- c( p.val, p.value ) 
+
+    # print(predict(fitAlt,testdat, se.fit=T))
+    p.val <- c( p.val, p.value )
+    dir <- fitAlt@param[2]
+    direction <- c(direction, dir)
   }
-  
+
+  Circ$direction <- direction
+  names(Circ$direction ) <- c("direction")
   p.adj <- p.adjust(p.val,n=sum(!is.na(p.val)),'BH')
   # select significant ones
   sig_dat <- Circ[p.adj<=alpha  & !is.na(p.adj),]
   sig_p <- p.adj[p.adj<=alpha  & !is.na(p.adj)]
-  # sort
+  direction <- direction[p.adj<=alpha  & !is.na(p.adj)]
+
+  # sort by p-val
   sig_dat <- sig_dat[order(sig_p),]
   sig_p <- sort(sig_p)
+
   # A summary table
   if (missing(CircCoordinates)){
     summary_table <- data.frame(sig_dat[,circle_description],sig_p)
+
     rownames(summary_table) <- rownames(sig_dat)
-    names(summary_table) <- c(names(sig_dat)[circle_description], 'sig_p')
-  }else{
-    summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p)
+    names(summary_table) <- c(names(sig_dat)[circle_description],"sig_p")
+  } else {
+    summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p,sig_dat$direction)
+    colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p","direction")
   }
-  return(list(summary_table=summary_table,sig.dat=sig_dat,p.val=p.val,p.adj=p.adj,sig_p=sig_p))
+
+  # return all objects in a list
+  return(list(summary_table=summary_table,
+              sig.dat=sig_dat,
+              p.val=p.val,
+              p.adj=p.adj,
+              sig_p=sig_p,
+              direction=direction)
+        )
 }
