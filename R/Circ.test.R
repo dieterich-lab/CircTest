@@ -18,83 +18,91 @@
 #' Circ.ratioplot(Circ,Linear,Coordinates,plotrow=rownames(test$sig.dat)[1],groupindicator1=c(rep('1days',6),rep('4days',6),rep('20days',6)),groupindicator2=rep(c(rep('Female',4),rep('Male',2)),3),lab_legend='Ages', circle_description = c(1:3))
 #' @export Circ.test
 
-Circ.test <- function(Circ,Linear,CircCoordinates=None,group,alpha=0.05,plotsig=T, circle_description = c(1:3)){
-  # Requre packge
-  require(aod)
+Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plotsig=T, circle_description = c(1:3)){
 
-  # check whether the input matrix are correct
-  if ( nrow(Circ)!=nrow(Linear) | ncol(Circ) != ncol(Linear)){
-    stop('Circ data and Linear data are not matched, dimention different.')
-  }
+    # Requre packge
+    require(aod)
 
-  # A vector for pvalue and directions indicator
-  p.val <- c()
-  direction <- c()
-
-  # groups
-  if ( length(group) != ncol(Circ)-length(circle_description) ){
-    stop("length of 'group' must be equal to the number of samples of 'Circ' and 'Linear'. ")
-  }
-  group <- factor(group)
-
-  ## test
-  # constract test matrix for each circRNA
-  for ( i in rownames(Circ) ){
-    # total read counts vector
-    tot <- round( as.numeric(Linear[i,-circle_description]) + as.numeric(Circ[i,-circle_description]) )
-
-    # circRNA read counts
-    circ <- as.numeric(Circ[i,-circle_description])
-
-
-    # if there is 0 in the total count vector, the model will fail. So permute 0 to 1
-    if ( 0 %in% tot ){
-      tot[tot==0]=1
+    # check whether the input matrix are correct
+    if ( nrow(Circ)!=nrow(Linear) | ncol(Circ) != ncol(Linear)){
+        stop('Circ data and Linear data are not matched, dimention different.')
     }
 
-    # Constract data frame
-    testdat = data.frame(tot,circ,group)
+    # A vector for pvalue and directions indicator
+    p.val <- c()
+    direction <- c()
 
-    ## do test
-    # Null model
-    fitNull <- betabin(cbind(circ,tot-circ) ~ 1, ~ 1, data=testdat)
-    # Alternative model
-    fitAlt <- betabin(cbind(circ,tot-circ) ~ group, ~ 1, data=testdat)
-    # test models
-    a <- anova(fitNull,fitAlt)
-    p.value <- a@anova.table[,11][2]
+    # groups
+    if ( length(group) != ncol(Circ)-length(circle_description) ){
+        stop("length of 'group' must be equal to the number of samples of 'Circ' and 'Linear'. ")
+    }
+    group <- factor(group)
+    counter <- 0
 
-    # print(predict(fitAlt,testdat, se.fit=T))
-    p.val <- c( p.val, p.value )
-    dir <- fitAlt@param[2]
-    direction <- c(direction, dir)
-  }
+    ## test
+    # constract test matrix for each circRNA
 
-  Circ$direction <- direction
-  names(Circ$direction ) <- c("direction")
-  p.adj <- p.adjust(p.val,n=sum(!is.na(p.val)),'BH')
-  # select significant ones
-  sig_dat <- Circ[p.adj<=alpha  & !is.na(p.adj),]
-  sig_p <- p.adj[p.adj<=alpha  & !is.na(p.adj)]
-  direction <- direction[p.adj<=alpha  & !is.na(p.adj)]
+    for ( i in rownames(Circ) ){
+        counter <- counter+1
 
-  # sort by p-val
-  sig_dat <- sig_dat[order(sig_p),]
-  sig_p <- sort(sig_p)
+        # total read counts vector
+        tot <- round( as.numeric(Linear[i,-circle_description]) + as.numeric(Circ[i,-circle_description]) )
 
-  # A summary table
-  if (missing(CircCoordinates)){
-    summary_table <- data.frame(sig_dat[,circle_description],sig_p)
+        # circRNA read counts
+        circ <- as.numeric(Circ[i,-circle_description])
 
-    rownames(summary_table) <- rownames(sig_dat)
-    names(summary_table) <- c(names(sig_dat)[circle_description],"sig_p")
-  } else {
-    summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p,sig_dat$direction)
-    colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p","direction")
-  }
+        # if there is 0 in the total count vector, the model will fail. So permute 0 to 1
+        if ( 0 %in% tot ){
+          tot[tot==0]=1
+        }
 
-  # return all objects in a list
-  return(list(summary_table=summary_table,
+        if (counter %% 1000 == 0){
+            message(paste(counter, "entities processed"))
+        }
+
+        # Constract data frame
+        testdat = data.frame(tot,circ,group)
+
+        ## do test
+        # Null model
+        fitNull <- betabin(cbind(circ,tot-circ) ~ 1, ~ 1, data=testdat)
+        # Alternative model
+        fitAlt <- betabin(cbind(circ,tot-circ) ~ group, ~ 1, data=testdat)
+        # test models
+        a <- anova(fitNull,fitAlt)
+        p.value <- a@anova.table[,11][2]
+
+        # print(predict(fitAlt,testdat, se.fit=T))
+        p.val <- c( p.val, p.value )
+        dir <- fitAlt@param[2]
+        direction <- c(direction, dir)
+    }
+
+    Circ$direction <- direction
+    names(Circ$direction ) <- c("direction")
+    p.adj <- p.adjust(p.val,n=sum(!is.na(p.val)),'BH')
+    # select significant ones
+    sig_dat <- Circ[p.adj<=alpha  & !is.na(p.adj),]
+    sig_p <- p.adj[p.adj<=alpha  & !is.na(p.adj)]
+    direction <- direction[p.adj<=alpha  & !is.na(p.adj)]
+
+    # sort by p-val
+    sig_dat <- sig_dat[order(sig_p),]
+    sig_p <- sort(sig_p)
+
+    # A summary table
+    if (missing(CircCoordinates)){
+        summary_table <- data.frame(sig_dat[,circle_description],sig_p)
+
+        rownames(summary_table) <- rownames(sig_dat)
+        names(summary_table) <- c(names(sig_dat)[circle_description],"sig_p")
+    } else {
+        summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p,sig_dat$direction)
+        colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p","direction")
+    }
+
+    # return all objects in a list
+    return(list(summary_table=summary_table,
               sig.dat=sig_dat,
               p.val=p.val,
               p.adj=p.adj,
