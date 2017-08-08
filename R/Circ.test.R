@@ -77,6 +77,7 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
         dir <- fitAlt@param[2]
         direction <- c(direction, dir)
     }
+    message(paste("Processed", counter, "entities"))
 
     Circ$direction <- direction
     names(Circ$direction ) <- c("direction")
