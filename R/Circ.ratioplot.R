@@ -106,10 +106,11 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=1
        theme_bw()+
        theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+
        theme(text=element_text(size=size))+
-       labs(list(title=paste(toString(Circ[plotrow,circle_description]),genename,sep=" "),x=x,y=y))+
-       geom_bar(stat="identity",aes(fill=groupindicator1))+
-       geom_errorbar(aes(ymin=Ratio-se, ymax=Ratio+se), width=.1 )+   # Width of the error bars
+       labs(list(title=paste("Annotation: ", genename, "\nLocation: Chr ", toString(Circ[plotrow,circle_description]),sep=""),x=x,y=y))+
+       geom_bar(stat="identity",aes(fill=groupindicator1), color="black", size=1)+
+       geom_errorbar(aes(ymin=Ratio-se, ymax=Ratio+se), width=.1 , size=1)+   # Width of the error bars
        scale_fill_discrete(name=lab_legend)+
+       theme(legend.position="bottom") +
        ylim(0, y_axis_range)
   if(twolevel){
     Q <- Q + facet_wrap( ~ groupindicator2,ncol=ncol )
