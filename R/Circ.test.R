@@ -74,7 +74,7 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
 
         # print(predict(fitAlt,testdat, se.fit=T))
         p.val <- c( p.val, p.value )
-        dir <- fitAlt@param[2]
+        dir <- fitAlt@param[2][["group2"]]
         direction <- c(direction, dir)
     }
     message(paste("Processed", counter, "entities"))
