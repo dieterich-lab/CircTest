@@ -71,13 +71,12 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
         # test models
         a <- anova(fitNull,fitAlt)
         p.value <- a@anova.table[,11][2]
-
         # print(predict(fitAlt,testdat, se.fit=T))
         p.val <- c( p.val, p.value )
-        dir <- fitAlt@param[2][["group2"]]
+        dir <- 1 # fitAlt@param[2][["group2"]]
         direction <- c(direction, dir)
     }
-    message(paste("Processed", counter, "entities"))
+    message(paste(counter, "entities processed"))
 
     Circ$direction <- direction
     names(Circ$direction ) <- c("direction")
@@ -101,6 +100,8 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
         summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p,sig_dat$direction)
         colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p","direction")
     }
+
+    message(paste(nrow(summary_table), "entities passed the specified thresholds"))
 
     # return all objects in a list
     return(list(summary_table=summary_table,
