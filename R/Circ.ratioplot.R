@@ -27,7 +27,7 @@
 #' 
 #' @export Circ.ratioplot
 #' 
-Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=24,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='circRNA/(circRNA+Linear)',lab_legend='groupindicator1', circle_description = c(1:3), gene_column = None, y_axis_range = 1){
+Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=24,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='circRNA/(circRNA+Linear)',lab_legend='groupindicator1', circle_description = c(1:3), gene_column = None, y_axis_range = 1, colour_mode = "colour"){
     require(ggplot2)
     require(grid)
   if( !is.null(groupindicator1) & length(groupindicator1) != ncol(Circ)-length(circle_description) ){
@@ -116,8 +116,15 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=2
        labs(list(title=paste("Annotation: ", genename, "\nChr ", toString(Circ[plotrow,circle_description]),sep=""),x=x,y=y)) +
        labs(y = "circRNA/(circRNA + Linear RNA)") + 
        geom_errorbar(aes(ymin=Ratio, ymax=Ratio+se), width=.2 , size=2) +
-       geom_bar(stat="identity",aes(fill=groupindicator1), color = "black", size=2)+
-       scale_fill_discrete(name=lab_legend)+
+       geom_bar(stat="identity",aes(fill=groupindicator1), color = "black", size=2)
+
+  if (colour_mode == "bw"){
+      Q <- Q + scale_fill_grey(start = 0.0, end = 1)
+  } else {
+      Q <- Q + scale_fill_discrete(name=lab_legend)
+  }
+
+       Q <- Q +
        theme(legend.position="bottom") +
        theme(axis.ticks.length = unit(0.5, "cm")) +
        theme(panel.background = element_blank(),
