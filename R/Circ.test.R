@@ -57,7 +57,7 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
         }
 
         if (counter %% 1000 == 0){
-            message(paste(counter, "entities processed"))
+            message(paste(counter, "candidates processed"))
         }
 
         # Constract data frame
@@ -73,18 +73,18 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
         p.value <- a@anova.table[,11][2]
         # print(predict(fitAlt,testdat, se.fit=T))
         p.val <- c( p.val, p.value )
-        dir <- 1 # fitAlt@param[2][["group2"]]
-        direction <- c(direction, dir)
+        # dir <- 1 # fitAlt@param[2][["group2"]]
+        # direction <- c(direction, dir)
     }
-    message(paste(counter, "entities processed"))
+    message(paste(counter, "candidates processed in total"))
 
     Circ$direction <- direction
-    names(Circ$direction ) <- c("direction")
+    #names(Circ$direction ) <- c("direction")
     p.adj <- p.adjust(p.val,n=sum(!is.na(p.val)),'BH')
     # select significant ones
     sig_dat <- Circ[p.adj<=alpha  & !is.na(p.adj),]
     sig_p <- p.adj[p.adj<=alpha  & !is.na(p.adj)]
-    direction <- direction[p.adj<=alpha  & !is.na(p.adj)]
+    # direction <- direction[p.adj<=alpha  & !is.na(p.adj)]
 
     # sort by p-val
     sig_dat <- sig_dat[order(sig_p),]
@@ -97,18 +97,22 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
         rownames(summary_table) <- rownames(sig_dat)
         names(summary_table) <- c(names(sig_dat)[circle_description],"sig_p")
     } else {
-        summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p,sig_dat$direction)
-        colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p","direction")
+        # summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p,sig_dat$direction)
+        # colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p","direction")
+
+        summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p)
+        colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p")
     }
 
-    message(paste(nrow(summary_table), "entities passed the specified thresholds"))
+    message(paste(nrow(summary_table), "candidates passed the specified thresholds"))
 
     # return all objects in a list
     return(list(summary_table=summary_table,
               sig.dat=sig_dat,
               p.val=p.val,
               p.adj=p.adj,
-              sig_p=sig_p,
-              direction=direction)
+              sig_p=sig_p #,
+              # direction=direction
+            )
         )
 }
