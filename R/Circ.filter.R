@@ -20,8 +20,13 @@ Circ.filter <- function(circ=circ,linear=linear,Nreplicates=3,filter.sample=4,fi
     if ( sum(circ[i,-circle_description]>=filter.count)<filter.sample | circ_max_perc(circ[i,-circle_description], linear[i,-circle_description],Nreplicates=Nreplicates)<percentage)
       del_row = c(del_row,i)
   }
-  new_dat=circ[-del_row,]
-  return(new_dat)
+
+  if (length(del_row) > 0){
+  	new_dat=circ[-del_row,]
+  	return(new_dat)
+  } else {
+	return(circ)
+  }
 }
 
 circ_max_perc <- function(circ=circ,linear=linear,Nreplicates=3){
