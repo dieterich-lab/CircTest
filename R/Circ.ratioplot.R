@@ -28,8 +28,7 @@
 #' @export Circ.ratioplot
 #' 
 Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=24,ncol=2,groupindicator1=NULL,groupindicator2=NULL,x='Conditions',y='circRNA/(circRNA+Linear)',lab_legend='groupindicator1', circle_description = c(1:3), gene_column = None, y_axis_range = 1, colour_mode = "colour"){
-    require(ggplot2)
-    require(grid)
+
   if( !is.null(groupindicator1) & length(groupindicator1) != ncol(Circ)-length(circle_description) ){
     stop("If provided, the length of groupindicator1 should be equal to the number of samples.")
   }
@@ -101,20 +100,22 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=2
                                      groupindicator1),
                                      measurevar='Ratio',groupvars=c('groupindicator1') )
   }
-  # construct plot
+# construct plot
   Q <- ggplot(plotdat, aes(x=groupindicator1, y=Ratio)) +
        geom_boxplot() + theme_classic() +
        theme(axis.text.x = element_blank())+
        theme(axis.text.y = element_text(size=size+4))+
-       theme(axis.ticks = element_line(colour = 'black', size = 2)) +
+       theme(axis.ticks = element_line(colour = 'black', size = 1)) +
        theme(axis.ticks.x = element_blank())+
        theme(legend.title=element_blank()) + 
        theme(text=element_text(size=size+4))+
        theme(legend.text=element_text(size=size)) +
        theme(plot.title = element_text(size=size)) + 
        theme(axis.text.y = element_text(margin=margin(5,5,10,5,"pt")))+
-       labs(list(title=paste("Annotation: ", genename, "\nChr ", toString(Circ[plotrow,circle_description]),sep=""),x=x,y=y)) +
-       labs(y = "circRNA/(circRNA + Linear RNA)") + 
+       #labs(list(title=paste("Annotation: ", genename, "\nChr ", toString(Circ[plotrow,circle_description]),sep=""),x=x,y=y)) +
+       ggtitle(paste("Annotation: ", genename, "\nChr ", toString(Circ[plotrow,circle_description]),sep="")) +
+       ylab("circRNA/(circRNA + Linear RNA)") + 
+       xlab("Sample") +         
        geom_errorbar(aes(ymin=Ratio, ymax=Ratio+se), width=.2 , size=2) +
        geom_bar(stat="identity",aes(fill=groupindicator1), color = "black", size=2)
 
@@ -133,8 +134,8 @@ Circ.ratioplot <- function(Circ,Linear,CircCoordinates = None,plotrow='1',size=2
         axis.line = element_line(colour = "black"),
         panel.border = element_rect(colour = "black", fill=NA, size=3)) + 
         guides(fill=guide_legend(
-                 keywidth=0.4,
-                 keyheight=0.4,
+                 keywidth=0.3,
+                 keyheight=0.3,
                  default.unit="inch")
       ) + scale_y_continuous(expand=c(0,0), limits= c(0, y_axis_range))
 
