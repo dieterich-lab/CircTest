@@ -14,5 +14,6 @@ VignetteBuilder: knitr
 Imports:
     aod,
     plyr,
-    ggplot2
+    ggplot2,
+    grid
 RoxygenNote: 5.0.1
