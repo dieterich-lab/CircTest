@@ -40,7 +40,13 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
     counter <- 0
 
     ## test
-    # constract test matrix for each circRNA
+    # construct test matrix for each circRNA
+
+    tmp_df = Circ[,FALSE]
+
+    for (j in seq(1,length(unique(group)))){
+        tmp_df[paste("group_",j,"_ratio_mean",sep="")] <- NA
+    }
 
     for ( i in rownames(Circ) ){
         counter <- counter+1
@@ -58,6 +64,12 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
 
         if (counter %% 1000 == 0){
             message(paste(counter, "candidates processed"))
+        }
+
+        tmp_rations <- data.frame(Ratio=as.numeric(Circ[i,-circle_description])/(as.numeric(Linear[i,-circle_description])+as.numeric(Circ[i,-circle_description])),
+        group=group)
+        for (rep_group in seq(1,max(as.numeric(levels(group))),1)){
+            tmp_df[i, paste("group_",rep_group,"_ratio_mean",sep="")] <- mean(na.omit(unlist(tmp_rations[tmp_rations$group==rep_group,1])))
         }
 
         # Constract data frame
@@ -83,25 +95,27 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
     p.adj <- p.adjust(p.val,n=sum(!is.na(p.val)),'BH')
     # select significant ones
     sig_dat <- Circ[p.adj<=alpha  & !is.na(p.adj),]
+    sig_ratios <- tmp_df[p.adj<=alpha  & !is.na(p.adj),]
     sig_p <- p.adj[p.adj<=alpha  & !is.na(p.adj)]
     # direction <- direction[p.adj<=alpha  & !is.na(p.adj)]
 
     # sort by p-val
     sig_dat <- sig_dat[order(sig_p),]
+    sig_ratios <- sig_ratios[order(sig_p),]
     sig_p <- sort(sig_p)
 
     # A summary table
     if (missing(CircCoordinates)){
-        summary_table <- data.frame(sig_dat[,circle_description],sig_p)
+        summary_table <- data.frame(sig_dat[,circle_description],sig_p,sig_dat[,circle_description])
 
         rownames(summary_table) <- rownames(sig_dat)
-        names(summary_table) <- c(names(sig_dat)[circle_description],"sig_p")
+        names(summary_table) <- c(names(sig_dat)[circle_description],"sig_p",names(sig_ratios)[circle_description])
     } else {
         # summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p,sig_dat$direction)
         # colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p","direction")
 
-        summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p)
-        colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p")
+        summary_table <- cbind(CircCoordinates[rownames(sig_dat),],sig_p,sig_ratios)
+        colnames(summary_table) <- c(colnames(CircCoordinates),"sig_p",colnames(sig_ratios))
     }
 
     message(paste(nrow(summary_table), "candidates passed the specified thresholds"))
@@ -111,7 +125,8 @@ Circ.test <- function(Circ, Linear, CircCoordinates=None, group, alpha=0.05, plo
               sig.dat=sig_dat,
               p.val=p.val,
               p.adj=p.adj,
-              sig_p=sig_p #,
+              sig_p=sig_p,
+              ratios=sig_ratios
               # direction=direction
             )
         )
