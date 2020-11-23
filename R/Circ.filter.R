@@ -14,32 +14,44 @@
 #' @export Circ.filter
 #'
 
-Circ.filter <- function(circ=circ,linear=linear,Nreplicates=3,filter.sample=4,filter.count=5,percentage=1, circle_description=c(1:3)){
-  del_row=c()
-  for ( i in 1:nrow(circ) ){
-    if ( sum(circ[i,-circle_description]>=filter.count)<filter.sample | circ_max_perc(circ[i,-circle_description], linear[i,-circle_description],Nreplicates=Nreplicates)<percentage)
-      del_row = c(del_row,i)
+Circ.filter <- function(circ = circ, linear = linear, Nreplicates = 3, filter.sample = 4, filter.count = 5, percentage = 1, circle_description = c(1:3)) {
+
+  del_row <- c()
+
+  for (i in 1:nrow(circ)) {
+
+    if (!is.null(Nreplicates)) {
+
+      if (sum(circ[i, -circle_description] >= filter.count) < filter.sample | circ_max_perc(circ[i, -circle_description], linear[i, -circle_description], Nreplicates = Nreplicates) < percentage)
+        del_row <- c(del_row, i)
+
+    } else {
+      if (sum(circ[i, -circle_description] >= filter.count) < filter.sample)
+        del_row <- c(del_row, i)
+    }
+
+
   }
 
-  if (length(del_row) > 0){
-  	new_dat=circ[-del_row,]
-  	return(new_dat)
+  if (length(del_row) > 0) {
+    new_dat = circ[-del_row,]
+    return(new_dat)
   } else {
-	return(circ)
+    return(circ)
   }
 }
 
-circ_max_perc <- function(circ=circ,linear=linear,Nreplicates=3){
+circ_max_perc <- function(circ = circ, linear = linear, Nreplicates = 3) {
   # convert to vector
-  circ = as.numeric(circ)
-  linear = as.numeric(linear)
-  if( length(circ) != length(linear) ){
-    stop ('Number of samples in circRNA is not equal to Hostgene.')
+  circ <- as.numeric(circ)
+  linear <- as.numeric(linear)
+  if (length(circ) != length(linear)) {
+    stop('Number of samples in circRNA is not equal to Hostgene.')
   }
-  Ngroups = length(circ)/Nreplicates
+  Ngroups <- length(circ) / Nreplicates
   # calculate percentage
-  circ_sum = unname(tapply(circ, (seq_along(1:length(circ))-1) %/% Nreplicates, sum ))
-  linear_sum = unname(tapply(linear, (seq_along(1:length(linear))-1) %/% Nreplicates, sum ))
-  perc = max(circ_sum / (circ_sum+linear_sum),na.rm=T)
+  circ_sum <- unname(tapply(circ, (seq_along(1:length(circ)) - 1) %/% Nreplicates, sum))
+  linear_sum <- unname(tapply(linear, (seq_along(1:length(linear)) - 1) %/% Nreplicates, sum))
+  perc <- max(circ_sum / (circ_sum + linear_sum), na.rm = T)
   return(perc)
 }
